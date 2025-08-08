@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const domain = 'nnzzm.com';
     
@@ -8,10 +8,15 @@ export async function GET(request: NextRequest) {
     const dnsResponse = await fetch(`https://dns.google/resolve?name=${domain}&type=A`);
     const dnsData = await dnsResponse.json();
     
-    const records = [];
+    const records: Array<{
+      type: string;
+      name: string;
+      value: string;
+      ttl: number;
+    }> = [];
     
     if (dnsData.Answer) {
-      dnsData.Answer.forEach((answer: any) => {
+      dnsData.Answer.forEach((answer: { data: string; TTL: number }) => {
         const parts = answer.data.split(' ');
         records.push({
           type: 'A',
@@ -27,7 +32,7 @@ export async function GET(request: NextRequest) {
     const cnameData = await cnameResponse.json();
     
     if (cnameData.Answer) {
-      cnameData.Answer.forEach((answer: any) => {
+      cnameData.Answer.forEach((answer: { data: string; TTL: number }) => {
         records.push({
           type: 'CNAME',
           name: `www.${domain}`,
@@ -44,7 +49,7 @@ export async function GET(request: NextRequest) {
       aaaaRecord: '2606:4700:10::ac43:2ae6'
     };
     
-    const issues = [];
+    const issues: string[] = [];
     
     // Aレコードの確認
     const aRecord = records.find(r => r.type === 'A' && r.name === domain);
