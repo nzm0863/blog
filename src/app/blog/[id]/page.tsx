@@ -8,7 +8,9 @@ export const dynamicParams = true;
 
 export async function generateStaticParams() {
   try {
-    const res = await fetch('https://www.nnzzm.com/blog_php/api/posts.php');
+    const res = await fetch('https://www.nnzzm.com/blog_php/api/posts.php', {
+      cache: "no-store",
+    });
     const posts: Post[] = await res.json();
     return posts.map((post) => ({
       id: String(post.id),
@@ -51,17 +53,22 @@ marked.use({ renderer });
 async function getPost(id: string): Promise<Post | null> {
   try {
     const res = await fetch(`https://www.nnzzm.com/blog_php/api/get_post.php?id=${id}`, {
-      next: { revalidate: 3600 } // 1時間ごとに再検証
+      cache: "no-store",
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
 
     if (!res.ok) {
       if (res.status === 404) return null;
-      throw new Error(`APIエラー: ${res.status}`);
+      console.error(`HTTP error! status: ${res.status}`);
+      throw new Error(`APIエラー: ${res.status} ${res.statusText}`);
     }
 
     const data = await res.json();
     
     if (!data || !data.success || !data.post) {
+      console.error("Invalid response format:", data);
       return null;
     }
 

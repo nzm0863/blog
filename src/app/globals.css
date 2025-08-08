@@ -263,10 +263,79 @@ a {
 }
 
 .blog-card p {
-  color: var(--text-secondary);
   margin: 0;
-  line-height: 1.8;
-  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* 固定ページのスタイル */
+.blog-card.fixed-page {
+  border: 2px solid var(--accent);
+  background: rgba(139, 154, 167, 0.05);
+}
+
+.fixed-badge {
+  background: var(--accent);
+  color: var(--background);
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 2px;
+  margin-left: 0.5rem;
+  font-weight: normal;
+}
+
+/* 認証関連のスタイル */
+.auth-container {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: var(--form-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.auth-form {
+  margin-top: 1.5rem;
+}
+
+.auth-info {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.auth-info a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.auth-required {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: var(--form-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  text-align: center;
+}
+
+.auth-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.success-message {
+  color: #4caf50;
+  font-size: 1.1rem;
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid #4caf50;
+  border-radius: 4px;
+  background: rgba(76, 175, 80, 0.1);
 }
 
 .back-link {
@@ -275,8 +344,167 @@ a {
 
 .error-message {
   color: var(--danger);
-  font-size: 0.95rem;
-  margin-top: 1rem;
+  font-size: 1.1rem;
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid var(--danger);
+  border-radius: 4px;
+  background: rgba(184, 92, 92, 0.1);
+}
+
+.error-details {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: var(--form-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.error-details p {
+  margin: 0.5rem 0;
+  font-weight: 500;
+}
+
+.error-details ul {
+  margin: 0.5rem 0 1.5rem 1.5rem;
+  padding: 0;
+}
+
+.error-details li {
+  margin: 0.25rem 0;
+  color: var(--text-secondary);
+}
+
+/* デバッグページのスタイル */
+.debug-section {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: var(--form-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.test-result {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  border-radius: 4px;
+  border: 1px solid;
+}
+
+.test-result.success {
+  background: rgba(76, 175, 80, 0.1);
+  border-color: #4caf50;
+}
+
+.test-result.error {
+  background: rgba(184, 92, 92, 0.1);
+  border-color: var(--danger);
+}
+
+.result-details p {
+  margin: 0.5rem 0;
+}
+
+.suggestions {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.suggestions h4 {
+  margin-bottom: 1rem;
+  color: var(--foreground);
+}
+
+.suggestions ul {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.suggestions li {
+  margin: 0.5rem 0;
+  color: var(--text-secondary);
+}
+
+.response-data {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.response-data h4 {
+  margin-bottom: 1rem;
+  color: var(--foreground);
+}
+
+.response-data pre {
+  background: var(--form-bg);
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-x: auto;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.debug-info {
+  margin-top: 3rem;
+  padding: 2rem;
+  background: var(--form-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+.troubleshooting-steps h4 {
+  margin: 1.5rem 0 0.5rem 0;
+  color: var(--accent);
+}
+
+.troubleshooting-steps p {
+  margin: 0.5rem 0 1rem 0;
+  color: var(--text-secondary);
+}
+
+/* DNSレコードテーブルのスタイル */
+.dns-records {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.dns-records h4 {
+  margin-bottom: 1rem;
+  color: var(--foreground);
+}
+
+.records-table {
+  overflow-x: auto;
+}
+
+.records-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.records-table th,
+.records-table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.records-table th {
+  background: var(--form-bg);
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.records-table td {
+  color: var(--text-secondary);
+}
+
+.records-table tr:hover {
+  background: var(--form-bg);
 }
 
 /* フォーム */

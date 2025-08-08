@@ -1,15 +1,52 @@
 "use client";
 
-import { useState } from "react";
+import { useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function NewPost() {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
   const [files, setFiles] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  // 認証チェック
+  if (status === 'loading') {
+    return (
+      <div className="container main-content">
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p className="loading-text">認証を確認中...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!session) {
+    return (
+      <div className="container main-content">
+        <div className="auth-required">
+          <h2>認証が必要です</h2>
+          <p>ブログ投稿には管理者ログインが必要です。</p>
+          <div className="auth-actions">
+            <Link href="/auth/signin" className="btn btn-primary">
+              ログイン
+            </Link>
+            <Link href="/blog" className="btn">
+              ブログ一覧に戻る
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // 画像プレビュー生成
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,7 +143,8 @@ export default function NewPost() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setError(null);
+    setError('');
+    setSuccess('');
 
     try {
       // 送信前にすべての画像をアップロードする
@@ -152,7 +190,15 @@ export default function NewPost() {
       const data = await res.json();
       console.log('記事投稿APIレスポンス:', data);
       if (data.success) {
-        window.location.href = "/blog";
+        setSuccess('投稿が完了しました！');
+        setTitle('');
+        setContent('');
+        clearFileSelection();
+        
+        // 3秒後にブログ一覧にリダイレクト
+        setTimeout(() => {
+          router.push('/blog');
+        }, 3000);
       } else {
         setError(data.error || data.message || "投稿に失敗しました");
       }
@@ -166,35 +212,57 @@ export default function NewPost() {
 
   return (
     <div className="container main-content">
-      <h1>新規投稿</h1>
-      
+      <div className="back-link">
+        <Link href="/blog" className="btn">
+          <span>←</span>
+          ブログ一覧に戻る
+        </Link>
+      </div>
+
+      <h1>新しい記事を投稿</h1>
+      <p>ログイン中: {session.user?.name}</p>
+
+      {error && (
+        <div className="error-message">
+          {error}
+        </div>
+      )}
+
+      {success && (
+        <div className="success-message">
+          {success}
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="post-form">
         <div className="form-group">
-          <label>
-            <span className="form-label">タイトル</span>
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-              className="form-input"
-              placeholder="記事のタイトルを入力"
-            />
+          <label htmlFor="title" className="form-label">
+            タイトル
           </label>
+          <input
+            type="text"
+            id="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="form-input"
+            required
+            placeholder="記事のタイトルを入力してください"
+          />
         </div>
 
         <div className="form-group">
-          <label>
-            <span className="form-label">本文</span>
-            <textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              required
-              rows={15}
-              className="form-input"
-              placeholder="Markdownで記事を書く"
-            />
+          <label htmlFor="content" className="form-label">
+            内容
           </label>
+          <textarea
+            id="content"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            className="form-input"
+            rows={15}
+            required
+            placeholder="記事の内容を入力してください（Markdown対応）"
+          />
         </div>
 
         <div className="form-group">
@@ -280,11 +348,9 @@ export default function NewPost() {
             disabled={isSubmitting}
             className="btn btn-primary"
           >
-            {isSubmitting ? "投稿中..." : "投稿する"}
+            {isSubmitting ? '投稿中...' : '投稿'}
           </button>
         </div>
-
-        {error && <p className="error-message">{error}</p>}
       </form>
     </div>
   );
