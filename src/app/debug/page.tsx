@@ -9,7 +9,7 @@ interface TestResult {
   url?: string;
   timestamp?: string;
   suggestions?: string[];
-  data?: any;
+  data?: unknown;
 }
 
 interface DnsCheckResult {
@@ -116,7 +116,7 @@ export default function DebugPage() {
             </div>
           )}
 
-          {testResult.data && (
+          {testResult.data !== undefined && (
             <div className="response-data">
               <h4>レスポンスデータ:</h4>
               <pre>{JSON.stringify(testResult.data, null, 2)}</pre>
