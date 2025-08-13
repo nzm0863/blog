@@ -2,6 +2,7 @@ export async function POST(req: Request) {
   try {
     const { title, content, image_url } = await req.json();
     const params = new URLSearchParams();
+    params.append('id', 'new'); // 新規投稿用のID
     params.append('title', title);
     params.append('content', content);
     if (image_url) {
@@ -15,6 +16,16 @@ export async function POST(req: Request) {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: params.toString(),
     });
+    
+    // レスポンスのContent-Typeをチェック
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('text/html')) {
+      // HTMLレスポンスの場合はエラーとして扱う
+      const htmlText = await response.text();
+      console.error('HTMLレスポンス:', htmlText);
+      throw new Error('外部APIからHTMLレスポンスが返されました。APIサーバーに問題がある可能性があります。');
+    }
+    
     const data = await response.json();
     return new Response(JSON.stringify(data), {
       status: response.status,
