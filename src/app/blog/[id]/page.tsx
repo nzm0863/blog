@@ -4,22 +4,24 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import "../../globals.css";
 
-export const dynamicParams = true;
+// 動的レンダリングを強制
+export const dynamic = 'force-dynamic';
 
-export async function generateStaticParams() {
-  try {
-    const res = await fetch('https://www.nnzzm.com/blog_php/api/posts.php', {
-      cache: "no-store",
-    });
-    const posts: Post[] = await res.json();
-    return posts.map((post) => ({
-      id: String(post.id),
-    }));
-  } catch (error) {
-    console.error('Error in generateStaticParams:', error);
-    return [];
-  }
-}
+// 静的生成は無効化（外部APIへの依存があるため）
+// export async function generateStaticParams() {
+//   try {
+//     const res = await fetch('https://www.nnzzm.com/blog_php/api/posts.php', {
+//       cache: "no-store",
+//     });
+//     const posts: Post[] = await res.json();
+//     return posts.map((post) => ({
+//       id: String(post.id),
+//     }));
+//   } catch (error) {
+//     console.error('Error in generateStaticParams:', error);
+//     return [];
+//   }
+// }
 
 interface Post {
   id: number;

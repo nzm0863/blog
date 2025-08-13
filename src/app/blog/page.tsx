@@ -1,5 +1,8 @@
 import Link from "next/link";
 
+// 動的レンダリングを強制
+export const dynamic = 'force-dynamic';
+
 interface Post {
   id: number | string;
   title: string;
