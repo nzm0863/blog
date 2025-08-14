@@ -11,9 +11,9 @@ export async function POST(req: Request) {
     // 特殊文字のエスケープ（必要に応じて）
     processedContent = processedContent.replace(/[\u0000-\u001F\u007F-\u009F]/g, '');
     
-    // 文字数制限チェック（50000文字）
-    if (processedContent.length > 50000) {
-      throw new Error('文章が長すぎます。50000文字以下にしてください。');
+    // 文字数制限チェック（15000文字 - パラメータサイズを考慮）
+    if (processedContent.length > 15000) {
+      throw new Error('文章が長すぎます。15000文字以下にしてください。パラメータサイズの制限により、短い文章に分割して投稿してください。');
     }
     
     console.log('元の文章の長さ:', content.length);
@@ -36,7 +36,9 @@ export async function POST(req: Request) {
     const response = await fetch('https://www.nnzzm.com/blog_php/api/post.php', {
       method: 'POST',
       headers: { 
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        'Accept': 'application/json, text/plain, */*'
       },
       body: params.toString(),
     });
