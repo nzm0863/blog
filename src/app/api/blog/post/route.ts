@@ -16,7 +16,9 @@ export async function POST(req: Request) {
 
     const response = await fetch('https://www.nnzzm.com/blog_php/api/post.php', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      headers: { 
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      },
       body: params.toString(),
     });
     
