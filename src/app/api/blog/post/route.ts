@@ -1,46 +1,43 @@
+import { gzipSync } from 'zlib';
+
 export async function POST(req: Request) {
   try {
     const { title, content, image_url } = await req.json();
     
-    // 文章の前処理
-    let processedContent = content;
-    
-    // 改行文字を統一
-    processedContent = processedContent.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-    
-    // 特殊文字のエスケープ（必要に応じて）
-    processedContent = processedContent.replace(/[\u0000-\u001F\u007F-\u009F]/g, '');
-    
-    // 文字数制限チェック（15000文字 - パラメータサイズを考慮）
-    if (processedContent.length > 15000) {
-      throw new Error('文章が長すぎます。15000文字以下にしてください。パラメータサイズの制限により、短い文章に分割して投稿してください。');
-    }
+    // 記事の内容を圧縮・エンコード（前処理なし）
+    const compressedContent = gzipSync(content).toString('base64');
     
     console.log('元の文章の長さ:', content.length);
-    console.log('処理後の文章の長さ:', processedContent.length);
+    console.log('圧縮後のデータサイズ:', compressedContent.length);
     
-    const params = new URLSearchParams();
-    params.append('id', 'new'); // 新規投稿用のID
-    params.append('title', title);
-    params.append('content', processedContent); // 処理済みの内容を使用
-    if (image_url) {
-      params.append('image_url', image_url);
-    } else {
-      params.append('image_url', '');
-    }
-
-    console.log('送信するパラメータ:', params.toString());
-    console.log('パラメータの長さ:', params.toString().length);
+    console.log('送信するJSONデータ:', {
+      id: 'new',
+      title,
+      content: compressedContent,
+      image_url: image_url || '',
+      encoding: 'gzip-base64'
+    });
+    console.log('JSONデータの長さ:', JSON.stringify({
+      id: 'new',
+      title,
+      content: compressedContent,
+      image_url: image_url || '',
+      encoding: 'gzip-base64'
+    }).length);
     console.log('外部APIにリクエスト送信中...');
 
     const response = await fetch('https://www.nnzzm.com/blog_php/api/post.php', {
       method: 'POST',
       headers: { 
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-        'Accept': 'application/json, text/plain, */*'
+        'Content-Type': 'application/json'
       },
-      body: params.toString(),
+      body: JSON.stringify({
+        id: 'new',
+        title,
+        content: compressedContent,
+        image_url: image_url || '',
+        encoding: 'gzip-base64'
+      }),
     });
     
     console.log('レスポンスステータス:', response.status);
