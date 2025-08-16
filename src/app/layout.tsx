@@ -7,12 +7,14 @@ import { Providers } from "./providers";
 
 const notoSansJP = Noto_Sans_JP({ 
   weight: ["300", "400", "500"],
-  variable: "--font-noto-sans"
+  variable: "--font-noto-sans",
+  preload: false
 });
 
 const notoSerifJP = Noto_Serif_JP({ 
   weight: ["300", "400"],
-  variable: "--font-noto-serif"
+  variable: "--font-noto-serif",
+  preload: false
 });
 
 export const metadata: Metadata = {
