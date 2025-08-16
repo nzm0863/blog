@@ -11,15 +11,20 @@
   --danger: #b85c5c;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   margin: 0;
   padding: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: "游明朝", YuMincho, "Hiragino Mincho ProN W3", "ヒラギノ明朝 ProN W3", "Hiragino Mincho ProN", "HG明朝E", "ＭＳ Ｐ明朝", "ＭＳ 明朝", serif;
+  font-family: var(--font-noto-sans), "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", "メイリオ", sans-serif;
   min-height: 100vh;
-  line-height: 2;
-  letter-spacing: 0.05em;
+  line-height: 1.8;
+  letter-spacing: 0.03em;
+  overflow-x: hidden;
 }
 
 a {
@@ -71,6 +76,20 @@ a {
   max-width: 800px;
   margin: 0 auto;
   padding: 0 2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 0.5rem;
+  }
 }
 
 .btn {
@@ -95,7 +114,7 @@ a {
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -103,33 +122,183 @@ a {
   }
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 .animate-fade-in {
+  opacity: 0;
   animation: fadeIn 0.8s ease-out forwards;
+  animation-fill-mode: forwards;
+}
+
+.animate-fade-in-up {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 1s ease-out forwards;
+  animation-fill-mode: forwards;
+}
+
+.animate-slide-in-left {
+  opacity: 0;
+  transform: translateX(-50px);
+  animation: slideInFromLeft 1.2s ease-out forwards;
+  animation-fill-mode: forwards;
+}
+
+/* ヒーローセクション */
+.hero {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  background: linear-gradient(135deg, 
+    rgba(26, 29, 33, 0.95) 0%, 
+    rgba(45, 51, 57, 0.95) 100%);
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(139, 154, 167, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(139, 154, 167, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.hero .container {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+}
+
+.hero h1 {
+  font-size: 3.5rem;
+  font-weight: 300;
+  color: var(--foreground);
+  letter-spacing: 0.2em;
+  line-height: 1.4;
+  margin-bottom: 2rem;
+  font-family: var(--font-noto-serif), "Yu Mincho", "Hiragino Mincho ProN", "ヒラギノ明朝 ProN", serif;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero h1.animate-fade-in-up {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.hero p {
+  font-size: 1.3rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.1em;
+  line-height: 1.8;
+  margin-bottom: 3rem;
+  font-weight: 300;
+  opacity: 0.9;
+}
+
+.hero p.animate-fade-in-up {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.hero .btn {
+  font-size: 1.1rem;
+  padding: 1rem 2.5rem;
+  letter-spacing: 0.15em;
+  background: rgba(139, 154, 167, 0.1);
+  border: 2px solid rgba(139, 154, 167, 0.3);
+  backdrop-filter: blur(10px);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  color: var(--foreground);
+}
+
+.hero .btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s ease;
+}
+
+.hero .btn:hover::before {
+  left: 100%;
+}
+
+.hero .btn:hover {
+  background: rgba(139, 154, 167, 0.25);
+  border-color: rgba(139, 154, 167, 0.6);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  color: #ffffff;
+}
+
+.hero .btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  background: rgba(139, 154, 167, 0.3);
 }
 
 /* ヘッダー */
 .site-header {
-  padding: 2rem 0;
+  padding: 0;
   border-bottom: 1px solid var(--border);
   margin-bottom: 3rem;
-  background: var(--header-bg);
-  backdrop-filter: blur(10px);
+  background: var(--background);
   position: sticky;
   top: 0;
   z-index: 100;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
 }
 
 .site-header .container {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 100%;
 }
 
 .site-title {
   font-size: 1.4rem;
-  font-weight: 400;
+  font-weight: 300;
   color: var(--foreground);
   letter-spacing: 0.15em;
+  font-family: var(--font-noto-serif), "Yu Mincho", "Hiragino Mincho ProN", "ヒラギノ明朝 ProN", serif;
 }
 
 .site-nav {
@@ -161,13 +330,218 @@ a {
   color: var(--foreground);
 }
 
-.nav-link:hover:after {
-  width: 100%;
+  .nav-link:hover:after {
+    width: 100%;
+  }
+
+/* フッター */
+.site-footer {
+  background: var(--background);
+  border-top: 1px solid var(--border);
+  margin-top: 4rem;
+  padding: 3rem 0 1rem;
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 2rem;
+}
+
+.footer-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-title {
+  font-size: 1.3rem;
+  font-weight: 300;
+  color: var(--foreground);
+  letter-spacing: 0.15em;
+  margin-bottom: 1rem;
+  font-family: var(--font-noto-serif), "Yu Mincho", "Hiragino Mincho ProN", "ヒラギノ明朝 ProN", serif;
+}
+
+.footer-description {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.footer-heading {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--foreground);
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+  font-family: var(--font-noto-sans), "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", "メイリオ", sans-serif;
+}
+
+.footer-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.footer-link {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  transition: color 0.3s ease;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  color: var(--foreground);
+}
+
+.footer-text {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.footer-bottom {
+  border-top: 1px solid var(--border);
+  padding-top: 1.5rem;
+  text-align: center;
+}
+
+.copyright {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .site-header {
+    padding: 1.5rem 0;
+    min-height: 70px;
+  }
+  
+  .site-header .container {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .site-title {
+    font-size: 1.2rem;
+    letter-spacing: 0.1em;
+  }
+  
+  .site-nav {
+    gap: 2rem;
+  }
+  
+  .nav-link {
+    font-size: 0.9rem;
+  }
+  
+  .container {
+    padding: 0 1rem;
+    width: calc(100% - 2rem);
+  }
+  
+  .blog-list {
+    width: calc(100% - 2rem);
+  }
+  
+  .main-content {
+    width: calc(100% - 2rem);
+  }
+  
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    text-align: center;
+  }
+  
+  .hero h1 {
+    font-size: 3rem;
+    letter-spacing: 0.18em;
+  }
+  
+  .hero p {
+    font-size: 1.2rem;
+  }
+  
+  .hero .btn {
+    font-size: 1.05rem;
+    padding: 0.9rem 2.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .site-header {
+    padding: 1rem 0;
+    min-height: 60px;
+  }
+  
+  .site-title {
+    font-size: 1.1rem;
+    letter-spacing: 0.1em;
+  }
+  
+  .site-nav {
+    gap: 1.5rem;
+  }
+  
+  .nav-link {
+    font-size: 0.85rem;
+  }
+  
+  .container {
+    padding: 0 0.5rem;
+    width: calc(100% - 1rem);
+  }
+  
+  .blog-list {
+    width: calc(100% - 1rem);
+  }
+  
+  .main-content {
+    width: calc(100% - 1rem);
+  }
+  
+  .hero h1 {
+    font-size: 2.5rem;
+    letter-spacing: 0.15em;
+  }
+  
+  .hero p {
+    font-size: 1.1rem;
+  }
+  
+  .hero .btn {
+    font-size: 1rem;
+    padding: 0.8rem 2rem;
+  }
+  
+  .site-footer {
+    margin-top: 2rem;
+    padding: 2rem 0 1rem;
+  }
+  
+  .footer-content {
+    gap: 1.5rem;
+  }
 }
 
 /* メインコンテンツ */
 .main-content {
   padding: 3rem 0;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 /* ブログ記事 */
@@ -185,8 +559,9 @@ a {
   font-size: 2.2rem;
   margin-bottom: 1.5rem;
   line-height: 1.6;
-  font-weight: 400;
-  letter-spacing: 0.1em;
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  font-family: var(--font-noto-serif), "Yu Mincho", "Hiragino Mincho ProN", "ヒラギノ明朝 ProN", serif;
 }
 
 .blog-post-meta {
@@ -225,9 +600,15 @@ a {
 
 /* ブログ一覧 */
 .blog-list {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 2.5rem;
   padding: 2rem 0;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .blog-card {
@@ -236,9 +617,13 @@ a {
   border: 1px solid var(--border);
   border-radius: 2px;
   transition: all 0.4s ease;
-  width: 67%;
-  /* margin: 0 auto; */
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 .blog-card:hover {
@@ -250,9 +635,10 @@ a {
 .blog-card h2 {
   margin: 0 0 1.5rem;
   font-size: 1.4rem;
-  font-weight: 400;
-  letter-spacing: 0.1em;
+  font-weight: 300;
+  letter-spacing: 0.12em;
   line-height: 1.6;
+  font-family: var(--font-noto-serif), "Yu Mincho", "Hiragino Mincho ProN", "ヒラギノ明朝 ProN", serif;
 }
 
 .blog-card-meta {
@@ -283,6 +669,29 @@ a {
   border-radius: 2px;
   margin-left: 0.5rem;
   font-weight: normal;
+}
+
+/* ブログ一覧のレスポンシブ対応 */
+@media (max-width: 768px) {
+  .blog-card {
+    padding: 1.5rem;
+    margin: 0 1rem;
+  }
+  
+  .blog-list {
+    padding: 1rem 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .blog-card {
+    padding: 1rem;
+    margin: 0 0.5rem;
+  }
+  
+  .blog-card h2 {
+    font-size: 1.2rem;
+  }
 }
 
 /* 認証関連のスタイル */

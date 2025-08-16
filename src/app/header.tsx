@@ -19,9 +19,6 @@ export default function Header() {
           <Link href="/blog" className="nav-link">
             ブログ
           </Link>
-          <Link href="/debug" className="nav-link">
-            デバッグ
-          </Link>
         </nav>
       </div>
     </header>
